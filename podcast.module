@@ -1,0 +1,19 @@
+<?php
+/**
+ * @file
+ * Code for the Podcast feature.
+ */
+
+include_once 'podcast.features.inc';
+
+include_once 'podcast.migrate.inc';
+
+function podcast_migrate_api() {
+  $api = array(
+    'api' => 2,
+    'migrations' => array(
+      'Podcast' => array('class_name' => 'PodcastMigration'),
+    ),
+  );
+  return $api;
+}
