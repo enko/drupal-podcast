@@ -393,6 +393,46 @@ function podcast_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-show-field__show__file_format'
+  $field_instances['node-show-field__show__file_format'] = array(
+    'bundle' => 'show',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'You can use tokens here.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 2,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field__show__file_format',
+    'label' => 'File Format',
+    'required' => 1,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 4,
+    ),
+  );
+
   // Exported field_instance: 'node-show-field__show__tags'
   $field_instances['node-show-field__show__tags'] = array(
     'bundle' => 'show',
@@ -437,11 +477,13 @@ function podcast_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('Audio');
   t('Body');
+  t('File Format');
   t('Image');
   t('Number');
   t('Show');
   t('Tags');
   t('Vote');
+  t('You can use tokens here.');
 
   return $field_instances;
 }

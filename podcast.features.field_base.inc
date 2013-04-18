@@ -176,6 +176,35 @@ function podcast_field_default_field_bases() {
     'type' => 'fivestar',
   );
 
+  // Exported field_base: 'field__show__file_format'
+  $field_bases['field__show__file_format'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field__show__file_format',
+    'foreign keys' => array(
+      'format' => array(
+        'columns' => array(
+          'format' => 'format',
+        ),
+        'table' => 'filter_format',
+      ),
+    ),
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(
+      'max_length' => 255,
+    ),
+    'translatable' => 0,
+    'type' => 'text',
+  );
+
   // Exported field_base: 'field__show__tags'
   $field_bases['field__show__tags'] = array(
     'active' => 1,
