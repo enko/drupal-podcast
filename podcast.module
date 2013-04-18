@@ -17,3 +17,34 @@ function podcast_migrate_api() {
   );
   return $api;
 }
+
+function podcast_node_update($node) {
+  if ($node->type == 'episode') {
+    if (_podcast_sanitize_file_name($node) > 0) {
+      drupal_set_message(t('Coud not rename the podcast-file.'),'error');
+    }
+  }
+}
+
+function podcast_node_insert($node) {
+  if ($node->type == 'episode') {
+    if (_podcast_sanitize_file_name($node) > 0) {
+      drupal_set_message(t('Coud not rename the podcast-file.'),'error');
+    }
+  }
+}
+
+function _podcast_sanitize_file_name($node) {
+  if ($node->nid > 0) {
+    $show = node_load($node->field__episode__show['und'][0]['nid']);
+    $fileformat = $show->field__show__file_format['und'][0]['safe_value'];
+    $filename = token_replace($fileformat,array('node' => $node));
+    $file = file_load($node->field_episode_audio['und'][0]['fid']);
+    if (file_move($file,sprintf('public://%s',$filename)) === false) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+  return 1;
+}
