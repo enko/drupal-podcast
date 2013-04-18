@@ -3,6 +3,13 @@ drupal-podcast
 
 A drupal module for managing podcasts
 
+Example
+=======
+
+A running instance can be seen here:
+
+http://ugw-archive.hacked.jp/
+
 TODO
 ====
 
