@@ -23,6 +23,9 @@ function podcast_node_update($node) {
     if (_podcast_sanitize_file_name($node) > 0) {
       drupal_set_message(t('Coud not rename the podcast-file.'),'error');
     }
+    if (_podcast_write_id3($node) > 0) {
+      drupal_set_message(t('Coud not write id3-tags into the podcast-file.'),'error');
+    }
   }
 }
 
@@ -30,6 +33,9 @@ function podcast_node_insert($node) {
   if ($node->type == 'episode') {
     if (_podcast_sanitize_file_name($node) > 0) {
       drupal_set_message(t('Coud not rename the podcast-file.'),'error');
+    }
+    if (_podcast_write_id3($node) > 0) {
+      drupal_set_message(t('Coud not write id3-tags into the podcast-file.'),'error');
     }
   }
 }
@@ -40,11 +46,58 @@ function _podcast_sanitize_file_name($node) {
     $fileformat = $show->field__show__file_format['und'][0]['safe_value'];
     $filename = token_replace($fileformat,array('node' => $node));
     $file = file_load($node->field_episode_audio['und'][0]['fid']);
-    if (file_move($file,sprintf('public://%s',$filename)) === false) {
-      return 1;
+    if ($file->filename != $filename) {
+      if (file_move($file,sprintf('public://%s',$filename)) === false) {
+        return 1;
+      } else {
+        return 0;
+      }
     } else {
       return 0;
     }
   }
   return 1;
+}
+
+function _podcast_write_id3($node) {
+  if ($node->nid > 0) {
+    $show = node_load($node->field__episode__show['und'][0]['nid']);
+    $tagdata = array();
+
+    // first collect all the data to put in the id3 tag
+    $tagdata['artist'] = array($show->title);
+    $tagdata['title'] = array(sprintf('%s (#%s)',$node->title,$node->field__episode__number['und'][0]['value']));
+    $tagdata['genre'] = array('Podcast');
+    $tagdata['track'] = array($node->field__episode__number['und'][0]['value']);
+    $tagdata['year'] = array(date('Y',$node->created));
+    $image = file_load($node->field__episode__image['und'][0]['fid']);
+    $uri = $image->uri;
+    $fhandle = fopen($uri, 'r');
+    $image_data = fread($fhandle, filesize($uri));
+    fclose($fhandle);
+    $tagdata['attached_picture'][0]['data'] = $image_data;
+    $tagdata['attached_picture'][0]['picturetypeid'] = 0x03;
+    $tagdata['attached_picture'][0]['description'] = '';
+    $tagdata['attached_picture'][0]['mime'] = $image->filemime;
+    dpm($tagdata);
+
+    // now safe it into teh id3 tag
+    require_once('getid3/getid3.php');
+    $getID3 = new getID3;
+    require_once('getid3/write.php');
+    $tagwriter = new getid3_writetags;
+    $audiofile = file_load($node->field_episode_audio['und'][0]['fid']);
+    $tagwriter->filename = drupal_realpath($audiofile->uri);
+    $tagwriter->tagformats = array('id3v2.3');
+    $tagwriter->tag_encoding = 'UTF-8';
+    $tagwriter->remove_other_tags = true;
+    $tagwriter->tag_data = $tagdata;
+    if ($tagwriter->WriteTags()) {
+      return 0;
+    } else {
+      dpm($tagwriter->errors);
+      return 1;
+    }
+
+  }
 }
