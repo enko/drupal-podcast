@@ -17,3 +17,4 @@ TODO
 * Fix broken images when writing ID3-Tags
 * Chapter Marks
 * Make some thoughts the datastructures
+* Add RSS feeds for shows
