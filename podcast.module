@@ -101,3 +101,17 @@ function _podcast_write_id3($node) {
 
   }
 }
+
+function podcast_theme($existing, $type, $theme, $path) {
+  $items = array(
+                 'node__episode' => array(
+                                      'template' =>  'node--episode',
+                                      'variables' => array('node' => (object)array())
+                                      )
+                 );
+  return $items;
+}
+
+function podcast_preprocess_node(&$vars) {
+  $vars['theme_hook_suggestions'][] = 'node__episode';
+}
