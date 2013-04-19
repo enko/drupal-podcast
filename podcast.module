@@ -114,8 +114,12 @@ function podcast_preprocess_node(&$vars) {
   $vars['theme_hook_suggestions'][] = 'node__episode';
   if ($vars['type'] == 'episode') {
     $node = $vars['node'];
+    $file = file_load($node->field_episode_audio['und'][0]['fid']);
+    $vars['episode_audiofile'] = $file;
+    $vars['episode_playtime'] = _podcast_get_playtime($node);
     $new_title = t('Episode @episodenumber: @title',array('@episodenumber' => $node->field__episode__number['und'][0]['value'],'@title' => $node->title));
     $vars['title'] = $new_title;
+    _podcast_add_assets();
   }
 }
 
@@ -124,5 +128,24 @@ function podcast_preprocess_page(&$vars) {
         $node = $vars['node'];
         $new_title = t('Episode @episodenumber: @title',array('@episodenumber' => $node->field__episode__number['und'][0]['value'],'@title' => $node->title));
         $vars['title'] = $new_title;
+        _podcast_add_assets();
     }
+}
+
+function _podcast_add_assets() {
+    drupal_add_js(drupal_get_path('module','podcast').'/podlove-web-player/podlove-web-player/libs/html5shiv.js');
+    drupal_add_js(drupal_get_path('module','podcast').'/podlove-web-player/podlove-web-player/libs/mediaelement/build/mediaelement-and-player.min.js');
+    drupal_add_js(drupal_get_path('module','podcast').'/podlove-web-player/podlove-web-player/podlove-web-player.js');
+    drupal_add_css(drupal_get_path('module','podcast').'/podlove-web-player/podlove-web-player/libs/mediaelement/build/mediaelementplayer.min.css');
+    drupal_add_css(drupal_get_path('module','podcast').'/podlove-web-player/podlove-web-player/libs/pwpfont/css/fontello.css');
+    drupal_add_css(drupal_get_path('module','podcast').'/podlove-web-player/podlove-web-player/podlove-web-player.css');
+}
+
+function _podcast_get_playtime($node) {
+
+    require_once('getid3/getid3.php');
+    $getID3 = new getID3;
+    $file = file_load($node->field_episode_audio['und'][0]['fid']);
+    $fileinfo = $getID3->analyze(drupal_realpath($file->uri));
+    return $fileinfo['playtime_string'];
 }
