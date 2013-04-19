@@ -79,7 +79,6 @@ function _podcast_write_id3($node) {
     $tagdata['attached_picture'][0]['picturetypeid'] = 0x03;
     $tagdata['attached_picture'][0]['description'] = '';
     $tagdata['attached_picture'][0]['mime'] = $image->filemime;
-    dpm($tagdata);
 
     // now safe it into teh id3 tag
     require_once('getid3/getid3.php');
@@ -95,7 +94,6 @@ function _podcast_write_id3($node) {
     if ($tagwriter->WriteTags()) {
       return 0;
     } else {
-      dpm($tagwriter->errors);
       return 1;
     }
 
@@ -114,4 +112,17 @@ function podcast_theme($existing, $type, $theme, $path) {
 
 function podcast_preprocess_node(&$vars) {
   $vars['theme_hook_suggestions'][] = 'node__episode';
+  if ($vars['type'] == 'episode') {
+    $node = $vars['node'];
+    $new_title = t('Episode @episodenumber: @title',array('@episodenumber' => $node->field__episode__number['und'][0]['value'],'@title' => $node->title));
+    $vars['title'] = $new_title;
+  }
+}
+
+function podcast_preprocess_page(&$vars) {
+    if ((array_key_exists('node',$vars)) && ($vars['node']->type == 'episode')) {
+        $node = $vars['node'];
+        $new_title = t('Episode @episodenumber: @title',array('@episodenumber' => $node->field__episode__number['und'][0]['value'],'@title' => $node->title));
+        $vars['title'] = $new_title;
+    }
 }
