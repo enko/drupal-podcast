@@ -1,0 +1,3 @@
+[submodule "podlove-web-player"]
+	path = podlove-web-player
+	url = git://github.com/podlove/podlove-web-player.git
