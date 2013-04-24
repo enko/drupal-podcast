@@ -42,7 +42,7 @@ function podcast_node_insert($node) {
 
 function _podcast_sanitize_file_name($node) {
   if ($node->nid > 0) {
-    $show = node_load($node->field__episode__show['und'][0]['nid']);
+    $show = node_load($node->field__episode__show['und'][0]['target_id']);
     $fileformat = $show->field__show__file_format['und'][0]['safe_value'];
     $filename = token_replace($fileformat, array('node' => $node));
     $file = file_load($node->field_episode_audio['und'][0]['fid']);
@@ -63,7 +63,7 @@ function _podcast_sanitize_file_name($node) {
 
 function _podcast_write_id3($node) {
   if ($node->nid > 0) {
-    $show = node_load($node->field__episode__show['und'][0]['nid']);
+    $show = node_load($node->field__episode__show['und'][0]['target_id']);
     $tagdata = array();
 
     // first collect all the data to put in the id3 tag
@@ -125,6 +125,7 @@ function podcast_preprocess_node(&$vars) {
       '@title' => $node->title
     ));
     $vars['title'] = $new_title;
+    $vars['chapters'] = _podcast_render_chapters($node);
     _podcast_add_assets();
   }
 }
@@ -137,6 +138,7 @@ function podcast_preprocess_page(&$vars) {
       '@title' => $node->title
     ));
     $vars['title'] = $new_title;
+    $vars['chapters'] = _podcast_render_chapters($node);
     _podcast_add_assets();
   }
 }
@@ -151,10 +153,52 @@ function _podcast_add_assets() {
 }
 
 function _podcast_get_playtime($node) {
-
   require_once('getid3/getid3.php');
   $getID3 = new getID3;
   $file = file_load($node->field_episode_audio['und'][0]['fid']);
   $fileinfo = $getID3->analyze(drupal_realpath($file->uri));
   return $fileinfo['playtime_string'];
+}
+
+/**
+ * Convert number of seconds into hours, minutes and seconds
+ * and return an array containing those values
+ *
+ * @param integer $seconds Number of seconds to parse
+ * @return array
+ */
+function _podcast_secondsToTime($seconds) {
+  // extract hours
+  $hours = floor($seconds / (60 * 60));
+
+  // extract minutes
+  $divisor_for_minutes = $seconds % (60 * 60);
+  $minutes = floor($divisor_for_minutes / 60);
+
+  // extract the remaining seconds
+  $divisor_for_seconds = $divisor_for_minutes % 60;
+  $seconds = ceil($divisor_for_seconds);
+
+  // return the final array
+  $obj = array(
+    "h" => (int) $hours,
+    "m" => (int) $minutes,
+    "s" => (int) $seconds,
+  );
+  return $obj;
+}
+
+function _podcast_render_chapters($node) {
+  $chapters = array();
+  if (count($node->field__episode__chapters) > 0) {
+    foreach($node->field__episode__chapters['und'] as $field_chapter) {
+      $chapter = node_load($field_chapter['target_id']);
+      $duration = _podcast_secondsToTime($chapter->field__chapter__time['und'][0]['value']);
+      $chapters[] = array(
+        'title' => $chapter->title,
+        'duration' => sprintf('%d:%d:%d.000',$duration['h'],$duration['m'],$duration['s']),
+      );
+    }
+  }
+  return $chapters;
 }
