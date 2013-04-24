@@ -39,6 +39,67 @@ function podcast_field_default_field_bases() {
     'type' => 'text_with_summary',
   );
 
+  // Exported field_base: 'field__chapter__time'
+  $field_bases['field__chapter__time'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field__chapter__time',
+    'foreign keys' => array(),
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'number',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'number_integer',
+  );
+
+  // Exported field_base: 'field__episode__chapters'
+  $field_bases['field__episode__chapters'] = array(
+    'active' => 1,
+    'cardinality' => -1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field__episode__chapters',
+    'foreign keys' => array(
+      'node' => array(
+        'columns' => array(
+          'target_id' => 'nid',
+        ),
+        'table' => 'node',
+      ),
+    ),
+    'indexes' => array(
+      'target_id' => array(
+        0 => 'target_id',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'entityreference',
+    'settings' => array(
+      'handler' => 'base',
+      'handler_settings' => array(
+        'behaviors' => array(
+          'views-select-list' => array(
+            'status' => 0,
+          ),
+        ),
+        'sort' => array(
+          'direction' => 'ASC',
+          'field' => 'field__chapter__time:value',
+          'type' => 'field',
+        ),
+        'target_bundles' => array(
+          'chapter' => 'chapter',
+        ),
+      ),
+      'target_type' => 'node',
+    ),
+    'translatable' => 0,
+    'type' => 'entityreference',
+  );
+
   // Exported field_base: 'field__episode__image'
   $field_bases['field__episode__image'] = array(
     'active' => 1,
@@ -93,35 +154,41 @@ function podcast_field_default_field_bases() {
     'entity_types' => array(),
     'field_name' => 'field__episode__show',
     'foreign keys' => array(
-      'nid' => array(
+      'node' => array(
         'columns' => array(
-          'nid' => 'nid',
+          'target_id' => 'nid',
         ),
         'table' => 'node',
       ),
     ),
     'indexes' => array(
-      'nid' => array(
-        0 => 'nid',
+      'target_id' => array(
+        0 => 'target_id',
       ),
     ),
     'locked' => 0,
-    'module' => 'node_reference',
+    'module' => 'entityreference',
     'settings' => array(
-      'referenceable_types' => array(
-        'article' => 0,
-        'episode' => 0,
-        'page' => 0,
-        'show' => 'show',
+      'handler' => 'base',
+      'handler_settings' => array(
+        'behaviors' => array(
+          'views-select-list' => array(
+            'status' => 0,
+          ),
+        ),
+        'sort' => array(
+          'direction' => 'ASC',
+          'property' => 'title',
+          'type' => 'property',
+        ),
+        'target_bundles' => array(
+          'show' => 'show',
+        ),
       ),
-      'view' => array(
-        'args' => array(),
-        'display_name' => '',
-        'view_name' => '',
-      ),
+      'target_type' => 'node',
     ),
     'translatable' => 0,
-    'type' => 'node_reference',
+    'type' => 'entityreference',
   );
 
   // Exported field_base: 'field__episode__tags'

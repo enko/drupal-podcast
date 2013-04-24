@@ -10,6 +10,96 @@
 function podcast_field_default_field_instances() {
   $field_instances = array();
 
+  // Exported field_instance: 'node-chapter-body'
+  $field_instances['node-chapter-body'] = array(
+    'bundle' => 'chapter',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'hidden',
+        'module' => 'text',
+        'settings' => array(
+          'trim_length' => 600,
+        ),
+        'type' => 'text_summary_or_trimmed',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'body',
+    'label' => 'Body',
+    'required' => FALSE,
+    'settings' => array(
+      'display_summary' => TRUE,
+      'text_processing' => 1,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 20,
+        'summary_rows' => 5,
+      ),
+      'type' => 'text_textarea_with_summary',
+      'weight' => 31,
+    ),
+  );
+
+  // Exported field_instance: 'node-chapter-field__chapter__time'
+  $field_instances['node-chapter-field__chapter__time'] = array(
+    'bundle' => 'chapter',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => ' ',
+        ),
+        'type' => 'number_integer',
+        'weight' => 1,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field__chapter__time',
+    'label' => 'Time',
+    'required' => 1,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 32,
+    ),
+  );
+
   // Exported field_instance: 'node-episode-body'
   $field_instances['node-episode-body'] = array(
     'bundle' => 'episode',
@@ -49,6 +139,48 @@ function podcast_field_default_field_instances() {
       ),
       'type' => 'text_textarea_with_summary',
       'weight' => 4,
+    ),
+  );
+
+  // Exported field_instance: 'node-episode-field__episode__chapters'
+  $field_instances['node-episode-field__episode__chapters'] = array(
+    'bundle' => 'episode',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 8,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field__episode__chapters',
+    'label' => 'Chapters',
+    'required' => 1,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'inline_entity_form',
+      'settings' => array(
+        'fields' => array(),
+        'type_settings' => array(),
+      ),
+      'type' => 'inline_entity_form',
+      'weight' => 10,
     ),
   );
 
@@ -155,15 +287,18 @@ function podcast_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 1,
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 7,
       ),
       'teaser' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 6,
+        'weight' => 0,
       ),
     ),
     'entity_type' => 'node',
@@ -178,7 +313,7 @@ function podcast_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 2,
+      'weight' => 9,
     ),
   );
 
@@ -286,7 +421,7 @@ function podcast_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'hidden',
-        'module' => 'mediaelement',
+        'module' => 'file',
         'settings' => array(
           'controls' => 1,
           'download_link' => 1,
@@ -294,12 +429,12 @@ function podcast_field_default_field_instances() {
           'height' => 30,
           'width' => 300,
         ),
-        'type' => 'mediaelement_audio',
+        'type' => 'file_default',
         'weight' => 3,
       ),
       'teaser' => array(
         'label' => 'hidden',
-        'module' => 'mediaelement',
+        'module' => 'file',
         'settings' => array(
           'controls' => 1,
           'download_link' => 1,
@@ -307,7 +442,7 @@ function podcast_field_default_field_instances() {
           'height' => 30,
           'width' => 300,
         ),
-        'type' => 'mediaelement_audio',
+        'type' => 'file_default',
         'weight' => 2,
       ),
     ),
@@ -330,11 +465,11 @@ function podcast_field_default_field_instances() {
           'public' => 'public',
         ),
         'allowed_types' => array(
-          'audio' => 0,
-          'document' => 0,
-          0 => 0,
           'image' => 'image',
           'video' => 0,
+          0 => 0,
+          'audio' => 0,
+          'document' => 0,
         ),
         'browser_plugins' => array(
           'media_default--media_browser_1' => 'media_default--media_browser_1',
@@ -477,11 +612,13 @@ function podcast_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('Audio');
   t('Body');
+  t('Chapters');
   t('File Format');
   t('Image');
   t('Number');
   t('Show');
   t('Tags');
+  t('Time');
   t('Vote');
   t('You can use tokens here.');
 
