@@ -21,10 +21,10 @@ function podcast_migrate_api() {
 function podcast_node_update($node) {
   if ($node->type == 'episode') {
     if (_podcast_sanitize_file_name($node) > 0) {
-      drupal_set_message(t('Coud not rename the podcast-file.'),'error');
+      drupal_set_message(t('Could not rename the podcast-file.'),'error');
     }
     if (_podcast_write_id3($node) > 0) {
-      drupal_set_message(t('Coud not write id3-tags into the podcast-file.'),'error');
+      drupal_set_message(t('Could not write id3-tags into the podcast-file.'),'error');
     }
   }
 }
@@ -32,10 +32,10 @@ function podcast_node_update($node) {
 function podcast_node_insert($node) {
   if ($node->type == 'episode') {
     if (_podcast_sanitize_file_name($node) > 0) {
-      drupal_set_message(t('Coud not rename the podcast-file.'),'error');
+      drupal_set_message(t('Could not rename the podcast-file.'),'error');
     }
     if (_podcast_write_id3($node) > 0) {
-      drupal_set_message(t('Coud not write id3-tags into the podcast-file.'),'error');
+      drupal_set_message(t('Could not write id3-tags into the podcast-file.'),'error');
     }
   }
 }
