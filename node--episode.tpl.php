@@ -114,6 +114,13 @@
                 permalink: '<?php echo url('node/'.$nid) ?>',
                 summary: '<?php echo (count($body) > 0 ? str_replace("\n","",$body[0]['safe_value']) : ''); ?>',
                 downloads: [{"name": "MPEG-1 Audio Layer III (MP3) High Quality","size": <?php echo $episode_audiofile->filesize; ?>,"url": "<?php echo file_create_url($episode_audiofile->uri); ?>","dlurl": "<?php echo file_create_url($episode_audiofile->uri); ?>"}],
+                <?php if (count($chapters) > 0): ?>
+                chapters: [
+                  <?php foreach($chapters as $chapter): ?>
+                    {'start':'<?php echo $chapter['duration'] ?>','title':'<?php echo $chapter['title'] ?>',   'image':''},
+                  <?php endforeach; ?>
+                ],
+                <?php endif; ?>
                 duration: '<?php echo $episode_playtime ?>',
                 alwaysShowHours: true,
                 startVolume: 0.8,
