@@ -119,6 +119,7 @@
                 startVolume: 0.8,
                 width: 'auto',
                 summaryVisible: false,
+                downloadbuttonsVisible: true,
                 timecontrolsVisible: true,
                 sharebuttonsVisible: false,
                 chaptersVisible: false
