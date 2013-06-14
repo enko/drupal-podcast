@@ -18,6 +18,10 @@ function podcast_migrate_api() {
   return $api;
 }
 
+function _require_local($file) {
+  require_once(dirname(__FILE__).'/'.$file);
+}
+
 function podcast_node_update($node) {
   if ($node->type == 'episode') {
     if (_podcast_sanitize_file_name($node) > 0) {
@@ -81,8 +85,8 @@ function _podcast_write_id3($node) {
     $tagdata['attached_picture'][0]['mime'] = $image->filemime;
 
     // now safe it into teh id3 tag
-    require_once('getid3/getid3.php');
-    require_once('getid3/write.php');
+    _require_local('getid3/getid3.php');
+    _require_local('getid3/write.php');
     $tagwriter = new getid3_writetags;
     $audiofile = file_load($node->field_episode_audio['und'][0]['fid']);
     $tagwriter->filename = drupal_realpath($audiofile->uri);
@@ -151,7 +155,7 @@ function _podcast_add_assets() {
 }
 
 function _podcast_get_playtime($node) {
-  require_once('getid3/getid3.php');
+  _require_local('getid3/getid3.php');
   $getID3 = new getID3;
   $file = file_load($node->field_episode_audio['und'][0]['fid']);
   $fileinfo = $getID3->analyze(drupal_realpath($file->uri));
