@@ -18,14 +18,18 @@ function podcast_migrate_api() {
   return $api;
 }
 
+function _require_local($file) {
+  require_once(dirname(__FILE__).'/'.$file);
+}
+
 function podcast_node_update($node) {
   if ($node->type == 'episode') {
     if (_podcast_sanitize_file_name($node) > 0) {
       drupal_set_message(t('Could not rename the podcast-file.'),'error');
     }
-    if (_podcast_write_id3($node) > 0) {
+    /*if (_podcast_write_id3($node) > 0) {
       drupal_set_message(t('Could not write id3-tags into the podcast-file.'),'error');
-    }
+      }*/
   }
 }
 
@@ -34,15 +38,15 @@ function podcast_node_insert($node) {
     if (_podcast_sanitize_file_name($node) > 0) {
       drupal_set_message(t('Could not rename the podcast-file.'),'error');
     }
-    if (_podcast_write_id3($node) > 0) {
+    /*if (_podcast_write_id3($node) > 0) {
       drupal_set_message(t('Could not write id3-tags into the podcast-file.'),'error');
-    }
+      }*/
   }
 }
 
 function _podcast_sanitize_file_name($node) {
   if ($node->nid > 0) {
-    $show = node_load($node->field__episode__show['und'][0]['target_id']);
+    $show = node_load($node->field__episode__show['und'][0]['nid']);
     $fileformat = $show->field__show__file_format['und'][0]['safe_value'];
     $filename = token_replace($fileformat, array('node' => $node));
     $file = file_load($node->field_episode_audio['und'][0]['fid']);
@@ -63,7 +67,7 @@ function _podcast_sanitize_file_name($node) {
 
 function _podcast_write_id3($node) {
   if ($node->nid > 0) {
-    $show = node_load($node->field__episode__show['und'][0]['target_id']);
+    $show = node_load($node->field__episode__show['und'][0]['nid']);
     $tagdata = array();
 
     // first collect all the data to put in the id3 tag
@@ -83,8 +87,8 @@ function _podcast_write_id3($node) {
     $tagdata['attached_picture'][0]['mime'] = $image->filemime;
 
     // now safe it into teh id3 tag
-    require_once('getid3/getid3.php');
-    require_once('getid3/write.php');
+    _require_local('getid3/getid3.php');
+    _require_local('getid3/write.php');
     $tagwriter = new getid3_writetags;
     $audiofile = file_load($node->field_episode_audio['und'][0]['fid']);
     $tagwriter->filename = drupal_realpath($audiofile->uri);
@@ -143,6 +147,31 @@ function podcast_preprocess_page(&$vars) {
   }
 }
 
+/* function podcast_token_info() { */
+/*     $info = array(); */
+/*     $info['tokens']['node']['field_episode_audio']['duration'] = array( */
+/*         'name' => t('Duration'), */
+/*         'description' => t('The duration of an episode in seconds.'), */
+/*     ); */
+/*     return $info; */
+/* } */
+
+/* function podcast_tokens($type, $tokens, array $data = array(), array $options = array()) { */
+/*     $replacements = array(); */
+/*     $sanitize = !empty($options['sanitize']); */
+
+/*     dpm($tokens); */
+
+/*     if ($type == 'node') { */
+/*         foreach ($tokens as $name => $original) { */
+/*             if (array_key_exists($name, $data)) { */
+/*                 $replacements[$original] = $data[$name]; */
+/*             } */
+/*         } */
+/*     } */
+/*     return $replacements; */
+/* } */
+
 function _podcast_add_assets() {
   drupal_add_js(drupal_get_path('module', 'podcast') . '/podlove-web-player/podlove-web-player/libs/html5shiv.js');
   drupal_add_js(drupal_get_path('module', 'podcast') . '/podlove-web-player/podlove-web-player/libs/mediaelement/build/mediaelement-and-player.min.js');
@@ -153,7 +182,7 @@ function _podcast_add_assets() {
 }
 
 function _podcast_get_playtime($node) {
-  require_once('getid3/getid3.php');
+  _require_local('getid3/getid3.php');
   $getID3 = new getID3;
   $file = file_load($node->field_episode_audio['und'][0]['fid']);
   $fileinfo = $getID3->analyze(drupal_realpath($file->uri));
