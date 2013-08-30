@@ -20,3 +20,4 @@ TODO
  * Use http://drupal.org/project/inline_entity_form for this
 * Make some thoughts the datastructures
 * Add RSS feeds for shows
+* Create a inputfilter for comments of an episode to reference specific timepoints in an episode, like in youtube (fe @32:16)
