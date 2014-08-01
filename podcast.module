@@ -77,12 +77,12 @@ function _podcast_write_id3($node) {
     $tagdata['track'] = array($node->field__episode__number['und'][0]['value']);
     $tagdata['year'] = array(date('Y', $node->created));
     $image = file_load($node->field__episode__image['und'][0]['fid']);
-    $uri = $image->uri;
-    $image_data = file_get_contents($uri);
-    $tagdata['APIC'][0]['data'] = $image_data;
-    $tagdata['APIC'][0]['picturetypeid'] = 0x03;
-    $tagdata['APIC'][0]['description'] = 'Episode Cover';
-    $tagdata['APIC'][0]['mime'] = $image->filemime;
+    $image_data = file_get_contents($image->uri);
+    $tagdata['attached_picture'][0]['data'] = $image_data;
+    $tagdata['attached_picture'][0]['datalength'] = strlen($image_data);
+    $tagdata['attached_picture'][0]['picturetypeid'] = 0x03;
+    $tagdata['attached_picture'][0]['description'] = '';
+    $tagdata['attached_picture'][0]['mime'] = $image->filemime;
 
     // now safe it into teh id3 tag
     _require_local('getid3/getid3.php');
