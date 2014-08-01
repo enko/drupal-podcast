@@ -27,9 +27,9 @@ function podcast_node_update($node) {
     if (_podcast_sanitize_file_name($node) > 0) {
       drupal_set_message(t('Could not rename the podcast-file.'),'error');
     }
-    /*if (_podcast_write_id3($node) > 0) {
+    if (_podcast_write_id3($node) > 0) {
       drupal_set_message(t('Could not write id3-tags into the podcast-file.'),'error');
-      }*/
+    }
   }
 }
 
@@ -38,9 +38,9 @@ function podcast_node_insert($node) {
     if (_podcast_sanitize_file_name($node) > 0) {
       drupal_set_message(t('Could not rename the podcast-file.'),'error');
     }
-    /*if (_podcast_write_id3($node) > 0) {
+    if (_podcast_write_id3($node) > 0) {
       drupal_set_message(t('Could not write id3-tags into the podcast-file.'),'error');
-      }*/
+    }
   }
 }
 
@@ -78,13 +78,11 @@ function _podcast_write_id3($node) {
     $tagdata['year'] = array(date('Y', $node->created));
     $image = file_load($node->field__episode__image['und'][0]['fid']);
     $uri = $image->uri;
-    $fhandle = fopen($uri, 'r');
-    $image_data = fread($fhandle, filesize($uri));
-    fclose($fhandle);
-    $tagdata['attached_picture'][0]['data'] = $image_data;
-    $tagdata['attached_picture'][0]['picturetypeid'] = 0x03;
-    $tagdata['attached_picture'][0]['description'] = '';
-    $tagdata['attached_picture'][0]['mime'] = $image->filemime;
+    $image_data = file_get_contents($uri);
+    $tagdata['APIC'][0]['data'] = $image_data;
+    $tagdata['APIC'][0]['picturetypeid'] = 0x03;
+    $tagdata['APIC'][0]['description'] = 'Episode Cover';
+    $tagdata['APIC'][0]['mime'] = $image->filemime;
 
     // now safe it into teh id3 tag
     _require_local('getid3/getid3.php');
@@ -92,7 +90,7 @@ function _podcast_write_id3($node) {
     $tagwriter = new getid3_writetags;
     $audiofile = file_load($node->field_episode_audio['und'][0]['fid']);
     $tagwriter->filename = drupal_realpath($audiofile->uri);
-    $tagwriter->tagformats = array('id3v2.3');
+    $tagwriter->tagformats = array('id3v2.4');
     $tagwriter->tag_encoding = 'UTF-8';
     $tagwriter->remove_other_tags = TRUE;
     $tagwriter->tag_data = $tagdata;
