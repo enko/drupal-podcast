@@ -154,41 +154,35 @@ function podcast_field_default_field_bases() {
     'entity_types' => array(),
     'field_name' => 'field__episode__show',
     'foreign keys' => array(
-      'node' => array(
+      'nid' => array(
         'columns' => array(
-          'target_id' => 'nid',
+          'nid' => 'nid',
         ),
         'table' => 'node',
       ),
     ),
     'indexes' => array(
-      'target_id' => array(
-        0 => 'target_id',
+      'nid' => array(
+        0 => 'nid',
       ),
     ),
     'locked' => 0,
-    'module' => 'entityreference',
+    'module' => 'node_reference',
     'settings' => array(
-      'handler' => 'base',
-      'handler_settings' => array(
-        'behaviors' => array(
-          'views-select-list' => array(
-            'status' => 0,
-          ),
-        ),
-        'sort' => array(
-          'direction' => 'ASC',
-          'property' => 'title',
-          'type' => 'property',
-        ),
-        'target_bundles' => array(
-          'show' => 'show',
-        ),
+      'referenceable_types' => array(
+        'article' => 0,
+        'episode' => 0,
+        'page' => 0,
+        'show' => 'show',
       ),
-      'target_type' => 'node',
+      'view' => array(
+        'args' => array(),
+        'display_name' => '',
+        'view_name' => '',
+      ),
     ),
     'translatable' => 0,
-    'type' => 'entityreference',
+    'type' => 'node_reference',
   );
 
   // Exported field_base: 'field__episode__tags'

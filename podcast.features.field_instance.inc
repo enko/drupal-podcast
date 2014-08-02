@@ -114,6 +114,13 @@ function podcast_field_default_field_instances() {
         'type' => 'text_default',
         'weight' => 4,
       ),
+      'rss' => array(
+        'label' => 'hidden',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 2,
+      ),
       'teaser' => array(
         'label' => 'hidden',
         'module' => 'text',
@@ -151,12 +158,15 @@ function podcast_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 8,
+      ),
+      'rss' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 7,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -168,7 +178,7 @@ function podcast_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field__episode__chapters',
     'label' => 'Chapters',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
@@ -177,7 +187,11 @@ function podcast_field_default_field_instances() {
       'module' => 'inline_entity_form',
       'settings' => array(
         'fields' => array(),
-        'type_settings' => array(),
+        'type_settings' => array(
+          'allow_existing' => 0,
+          'delete_references' => 0,
+          'match_operator' => 'CONTAINS',
+        ),
       ),
       'type' => 'inline_entity_form',
       'weight' => 10,
@@ -199,6 +213,16 @@ function podcast_field_default_field_instances() {
         ),
         'type' => 'image',
         'weight' => 2,
+      ),
+      'rss' => array(
+        'label' => 'hidden',
+        'module' => 'image',
+        'settings' => array(
+          'image_link' => 'content',
+          'image_style' => 'large',
+        ),
+        'type' => 'image',
+        'weight' => 1,
       ),
       'teaser' => array(
         'label' => 'hidden',
@@ -251,6 +275,12 @@ function podcast_field_default_field_instances() {
         'type' => 'hidden',
         'weight' => 5,
       ),
+      'rss' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 5,
+      ),
       'teaser' => array(
         'label' => 'above',
         'settings' => array(),
@@ -286,13 +316,18 @@ function podcast_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'label' => 'hidden',
+        'module' => 'node_reference',
+        'settings' => array(),
+        'type' => 'node_reference_default',
         'weight' => 7,
+      ),
+      'rss' => array(
+        'label' => 'hidden',
+        'module' => 'node_reference',
+        'settings' => array(),
+        'type' => 'node_reference_default',
+        'weight' => 3,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -325,6 +360,13 @@ function podcast_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
+        'label' => 'above',
+        'module' => 'taxonomy',
+        'settings' => array(),
+        'type' => 'taxonomy_term_reference_link',
+        'weight' => 0,
+      ),
+      'rss' => array(
         'label' => 'above',
         'module' => 'taxonomy',
         'settings' => array(),
@@ -379,6 +421,12 @@ function podcast_field_default_field_instances() {
         'type' => 'fivestar_formatter_default',
         'weight' => 6,
       ),
+      'rss' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 6,
+      ),
       'teaser' => array(
         'label' => 'hidden',
         'module' => 'fivestar',
@@ -422,15 +470,18 @@ function podcast_field_default_field_instances() {
       'default' => array(
         'label' => 'hidden',
         'module' => 'file',
-        'settings' => array(
-          'controls' => 1,
-          'download_link' => 1,
-          'download_text' => 'Download',
-          'height' => 30,
-          'width' => 300,
-        ),
+        'settings' => array(),
         'type' => 'file_default',
         'weight' => 3,
+      ),
+      'rss' => array(
+        'label' => 'hidden',
+        'module' => 'rss_enclosure',
+        'settings' => array(
+          'image_style' => '',
+        ),
+        'type' => 'rss_enclosure',
+        'weight' => 4,
       ),
       'teaser' => array(
         'label' => 'hidden',
@@ -465,11 +516,11 @@ function podcast_field_default_field_instances() {
           'public' => 'public',
         ),
         'allowed_types' => array(
-          'image' => 'image',
-          'video' => 0,
           0 => 0,
           'audio' => 0,
           'document' => 0,
+          'image' => 'image',
+          'video' => 0,
         ),
         'browser_plugins' => array(
           'media_default--media_browser_1' => 'media_default--media_browser_1',
