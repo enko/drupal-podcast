@@ -119,6 +119,7 @@ function podcast_preprocess_node(&$vars) {
   $vars['theme_hook_suggestions'][] = 'node__episode';
   if ($vars['type'] == 'episode') {
     $node = $vars['node'];
+    $show = node_load($node->field__episode__show['und'][0]['nid']);
     $file = file_load($node->field_episode_audio['und'][0]['fid']);
     $vars['episode_audiofile'] = $file;
     $vars['episode_playtime'] = _podcast_get_playtime($node);
@@ -129,7 +130,25 @@ function podcast_preprocess_node(&$vars) {
     $vars['title'] = $new_title;
     $vars['chapters'] = _podcast_render_chapters($node);
     _podcast_add_assets();
+    _podcast_add_og_header('title',$new_title);
+    _podcast_add_og_header('type','song');
+    _podcast_add_og_header('site_name',$show->title);
+    _podcast_add_og_header('description',$show->title);
+    _podcast_add_og_header('image',image_style_url('large',$node->field__episode__image['und'][0]['uri']));
+
   }
+}
+
+function _podcast_add_og_header($name,$value) {
+  $header = array(
+    '#type' => 'html_tag',
+    '#tag' => 'meta',
+    '#attributes' => array(
+      'property' =>  'og:'.$name,
+      'content' => $value,
+    )
+  );
+  drupal_add_html_head($header, 'podcast_og_header_'.$name);
 }
 
 function podcast_preprocess_page(&$vars) {
