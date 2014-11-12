@@ -173,10 +173,10 @@ function podcast_preprocess_page(&$vars) {
 function _podcast_add_assets() {
   drupal_add_js(drupal_get_path('module', 'podcast') . '/podlove-web-player/podlove-web-player/libs/html5shiv.js');
   drupal_add_js(drupal_get_path('module', 'podcast') . '/podlove-web-player/podlove-web-player/libs/mediaelement/build/mediaelement-and-player.min.js');
-  drupal_add_js(drupal_get_path('module', 'podcast') . '/podlove-web-player/podlove-web-player/podlove-web-player.js');
+  drupal_add_js(drupal_get_path('module', 'podcast') . '/podlove-web-player/podlove-web-player/static/podlove-web-player.js');
   drupal_add_css(drupal_get_path('module', 'podcast') . '/podlove-web-player/podlove-web-player/libs/mediaelement/build/mediaelementplayer.min.css');
   drupal_add_css(drupal_get_path('module', 'podcast') . '/podlove-web-player/podlove-web-player/libs/pwpfont/css/fontello.css');
-  drupal_add_css(drupal_get_path('module', 'podcast') . '/podlove-web-player/podlove-web-player/podlove-web-player.css');
+  drupal_add_css(drupal_get_path('module', 'podcast') . '/podlove-web-player/podlove-web-player/static/podlove-web-player.css');
 }
 
 function _podcast_get_playtime($node) {
