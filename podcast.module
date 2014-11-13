@@ -116,8 +116,8 @@ function podcast_theme($existing, $type, $theme, $path) {
 }
 
 function podcast_preprocess_node(&$vars) {
-  $vars['theme_hook_suggestions'][] = 'node__episode';
   if ($vars['type'] == 'episode') {
+    $vars['theme_hook_suggestions'][] = 'node__episode';
     $node = $vars['node'];
     $show = node_load($node->field__episode__show['und'][0]['nid']);
     $file = file_load($node->field_episode_audio['und'][0]['fid']);
